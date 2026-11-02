@@ -1,0 +1,7 @@
+<?php
+require_once __DIR__ . '/auth.php';
+require_login();
+$result = mysqli_query($koneksi, 'SELECT nama_produk, harga, stok, deskripsi FROM produk ORDER BY nama_produk ASC');
+if (!$result) { http_response_code(500); exit('Laporan gagal dimuat.'); }
+?>
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laporan Stok — AgriLokal Nusantara</title><style>body{font:14px Arial,sans-serif;color:#1d2b20;margin:30px}h1{margin-bottom:4px}.sub{color:#68766c;margin-bottom:22px}table{width:100%;border-collapse:collapse}th,td{padding:10px;border:1px solid #bac5bb;text-align:left}th{background:#eaf0e7}.print{padding:9px 14px;margin-bottom:18px;background:#c5f015;border:0;cursor:pointer;font-weight:bold}@media print{.print{display:none}body{margin:0}}</style></head><body><button class="print" onclick="window.print()">Cetak Laporan</button><h1>AgriLokal Nusantara</h1><div class="sub">Laporan ketersediaan stok produk</div><table><thead><tr><th>No</th><th>Nama Produk</th><th>Harga (Rp)</th><th>Stok</th><th>Deskripsi</th></tr></thead><tbody><?php $no=1; while ($row=mysqli_fetch_assoc($result)): ?><tr><td><?= $no++ ?></td><td><?= h($row['nama_produk']) ?></td><td><?= number_format((int)$row['harga'],0,',','.') ?></td><td><?= (int)$row['stok'] ?></td><td><?= h($row['deskripsi']) ?></td></tr><?php endwhile; ?></tbody></table></body></html>
